@@ -11,20 +11,19 @@ export function CTASection() {
             Ready to Transform Your Amazon Business?
           </h2>
           <p className="mb-8 text-pretty text-lg text-white/90 md:text-xl">
-            Join thousands of sellers who are saving time and increasing sales with InstaRank. Start your 14-day free
-            trial today—no credit card required.
+            Join thousands of sellers who are saving time and increasing sales with InstaRank. Explore our AI-powered platform with an interactive demo.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
-              <Link href="/signup">
-                Start Free Trial
+              <Link href="/dashboard">
+                Launch Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="w-full sm:w-auto border-2 border-white bg-transparent text-white hover:bg-white/10"
+              className="w-full border-2 border-white bg-transparent text-white hover:bg-white/10 sm:w-auto"
               asChild
             >
               <Link href="#features">Learn More</Link>

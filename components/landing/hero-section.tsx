@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, TrendingUp, Zap, Target } from "lucide-react"
+import { ArrowRight, TrendingUp, Zap, Target } from 'lucide-react'
 
 export function HeroSection() {
   return (
@@ -24,15 +24,14 @@ export function HeroSection() {
             increase sales by up to 56%.
           </p>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="w-full sm:w-auto" asChild>
-              <Link href="/signup">
-                Start 14-Day Free Trial
+              <Link href="/dashboard">
+                Launch Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent" asChild>
+            <Button size="lg" variant="outline" className="w-full bg-transparent sm:w-auto" asChild>
               <Link href="#features">See How It Works</Link>
             </Button>
           </div>
@@ -54,10 +53,9 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Hero Image Placeholder */}
         <div className="mx-auto mt-16 max-w-5xl">
-          <div className="relative aspect-video overflow-hidden rounded-xl border border-border bg-muted shadow-2xl">
-            <img src="/modern-dashboard-interface-showing-amazon-product-.jpg" alt="InstaRank Dashboard" className="h-full w-full object-cover" />
+          <div className="relative aspect-video overflow-hidden rounded-xl border-4 border-primary/30 bg-muted shadow-2xl ring-4 ring-primary/10">
+            <img src="/dashboard-preview.png" alt="InstaRank Dashboard Preview" className="h-full w-full object-cover" />
           </div>
         </div>
       </div>
