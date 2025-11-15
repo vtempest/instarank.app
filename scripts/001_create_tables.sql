@@ -1,16 +1,46 @@
--- Create users table
+-- NextAuth tables
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR(255) NOT NULL UNIQUE,
   name VARCHAR(255),
-  password_hash TEXT NOT NULL,
-  subscription_tier VARCHAR(50) DEFAULT 'free',
-  subscription_status VARCHAR(50) DEFAULT 'inactive',
+  password_hash TEXT,
+  image TEXT,
+  email_verified TIMESTAMP,
+  subscription_tier VARCHAR(50) DEFAULT 'starter',
+  subscription_status VARCHAR(50) DEFAULT 'trial',
   stripe_customer_id VARCHAR(255),
   stripe_subscription_id VARCHAR(255),
   trial_ends_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMP DEFAULT NOW() NOT NULL
+);
+
+-- Added NextAuth accounts table for OAuth providers
+CREATE TABLE IF NOT EXISTS accounts (
+  id UUID DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type VARCHAR(255) NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  provider_account_id VARCHAR(255) NOT NULL,
+  refresh_token TEXT,
+  access_token TEXT,
+  expires_at INTEGER,
+  token_type VARCHAR(255),
+  scope VARCHAR(255),
+  id_token TEXT,
+  session_state VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  PRIMARY KEY (provider, provider_account_id)
+);
+
+-- Added NextAuth sessions table
+CREATE TABLE IF NOT EXISTS sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_token VARCHAR(255) NOT NULL UNIQUE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 -- Create stores table
@@ -117,6 +147,8 @@ CREATE TABLE IF NOT EXISTS usage_tracking (
 );
 
 -- Create indexes for better query performance
+CREATE INDEX IF NOT EXISTS idx_accounts_user_id ON accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_stores_user_id ON stores(user_id);
 CREATE INDEX IF NOT EXISTS idx_products_store_id ON products(store_id);
 CREATE INDEX IF NOT EXISTS idx_products_asin ON products(asin);
