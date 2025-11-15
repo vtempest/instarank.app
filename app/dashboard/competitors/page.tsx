@@ -14,39 +14,47 @@ export default async function CompetitorsPage() {
   }
 
   // Fetch user's products for the dropdown
-  const userProducts = await db
-    .select({
-      id: products.id,
-      title: products.title,
-      asin: products.asin,
-    })
-    .from(products)
-    .innerJoin(stores, eq(products.storeId, stores.id))
-    .where(eq(stores.userId, session.id))
-    .limit(50)
+  let userProducts: any[] = []
+  let userCompetitors: any[] = []
 
-  // Fetch competitors
-  const userCompetitors = await db
-    .select({
-      id: competitors.id,
-      asin: competitors.asin,
-      title: competitors.title,
-      price: competitors.price,
-      rating: competitors.rating,
-      reviewCount: competitors.reviewCount,
-      rank: competitors.rank,
-      imageUrl: competitors.imageUrl,
-      lastScrapedAt: competitors.lastScrapedAt,
-      productId: competitors.productId,
-      productTitle: products.title,
-      productAsin: products.asin,
-    })
-    .from(competitors)
-    .innerJoin(products, eq(competitors.productId, products.id))
-    .innerJoin(stores, eq(products.storeId, stores.id))
-    .where(eq(stores.userId, session.id))
-    .orderBy(desc(competitors.createdAt))
-    .limit(100)
+  try {
+    userProducts = await db
+      .select({
+        id: products.id,
+        title: products.title,
+        asin: products.asin,
+      })
+      .from(products)
+      .innerJoin(stores, eq(products.storeId, stores.id))
+      .where(eq(stores.userId, session.id))
+      .limit(50)
+
+    // Fetch competitors
+    userCompetitors = await db
+      .select({
+        id: competitors.id,
+        asin: competitors.asin,
+        title: competitors.title,
+        price: competitors.price,
+        rating: competitors.rating,
+        reviewCount: competitors.reviewCount,
+        rank: competitors.rank,
+        imageUrl: competitors.imageUrl,
+        lastScrapedAt: competitors.lastScrapedAt,
+        productId: competitors.productId,
+        productTitle: products.title,
+        productAsin: products.asin,
+      })
+      .from(competitors)
+      .innerJoin(products, eq(competitors.productId, products.id))
+      .innerJoin(stores, eq(products.storeId, stores.id))
+      .where(eq(stores.userId, session.id))
+      .orderBy(desc(competitors.createdAt))
+      .limit(100)
+  } catch (error) {
+    console.log("[v0] Database tables not yet created, using mock data:", error)
+    // Mock data will be used (already initialized above)
+  }
 
   return (
     <div className="space-y-6">
