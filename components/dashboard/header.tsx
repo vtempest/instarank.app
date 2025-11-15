@@ -9,20 +9,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { User, Settings, LogOut, Menu } from "lucide-react"
+import { User, Settings, LogOut, Menu } from 'lucide-react'
 import type { SessionUser } from "@/lib/auth/session"
 import { logout } from "@/lib/auth/actions"
 import Image from "next/image"
 
 interface DashboardHeaderProps {
   user: SessionUser
+  onMenuClick: () => void
 }
 
-export function DashboardHeader({ user }: DashboardHeaderProps) {
+export function DashboardHeader({ user, onMenuClick }: DashboardHeaderProps) {
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-background px-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="lg:hidden">
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuClick}>
           <Menu className="h-5 w-5" />
         </Button>
         <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
