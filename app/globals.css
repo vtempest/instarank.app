@@ -148,3 +148,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add border-beam animation keyframes */
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}

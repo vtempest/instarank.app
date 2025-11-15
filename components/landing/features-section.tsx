@@ -1,4 +1,5 @@
 import { Search, Sparkles, FileText, Share2, BarChart, Brain } from 'lucide-react'
+import { BorderBeam } from '@/components/ui/border-beam'
 
 const features = [
   {
@@ -9,6 +10,8 @@ const features = [
     borderColor: "border-blue-500",
     bgColor: "bg-blue-500/10",
     iconColor: "text-blue-600",
+    beamFrom: "#3b82f6",
+    beamTo: "#60a5fa",
   },
   {
     icon: Sparkles,
@@ -17,6 +20,8 @@ const features = [
     borderColor: "border-purple-500",
     bgColor: "bg-purple-500/10",
     iconColor: "text-purple-600",
+    beamFrom: "#a855f7",
+    beamTo: "#c084fc",
   },
   {
     icon: FileText,
@@ -25,6 +30,8 @@ const features = [
     borderColor: "border-green-500",
     bgColor: "bg-green-500/10",
     iconColor: "text-green-600",
+    beamFrom: "#10b981",
+    beamTo: "#34d399",
   },
   {
     icon: Share2,
@@ -33,6 +40,8 @@ const features = [
     borderColor: "border-orange-500",
     bgColor: "bg-orange-500/10",
     iconColor: "text-orange-600",
+    beamFrom: "#f97316",
+    beamTo: "#fb923c",
   },
   {
     icon: BarChart,
@@ -41,6 +50,8 @@ const features = [
     borderColor: "border-pink-500",
     bgColor: "bg-pink-500/10",
     iconColor: "text-pink-600",
+    beamFrom: "#ec4899",
+    beamTo: "#f472b6",
   },
   {
     icon: Brain,
@@ -49,6 +60,8 @@ const features = [
     borderColor: "border-cyan-500",
     bgColor: "bg-cyan-500/10",
     iconColor: "text-cyan-600",
+    beamFrom: "#06b6d4",
+    beamTo: "#22d3ee",
   },
 ]
 
@@ -66,13 +79,20 @@ export function FeaturesSection() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => {
+          {features.map((feature, index) => {
             const Icon = feature.icon
             return (
               <div
                 key={feature.title}
                 className={`group relative overflow-hidden rounded-lg border-2 ${feature.borderColor} bg-background p-6 transition-all hover:shadow-xl hover:shadow-${feature.borderColor}/20`}
               >
+                <BorderBeam
+                  size={250}
+                  duration={12}
+                  delay={index * 2}
+                  colorFrom={feature.beamFrom}
+                  colorTo={feature.beamTo}
+                />
                 <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${feature.bgColor} transition-transform group-hover:scale-110`}>
                   <Icon className={`h-6 w-6 ${feature.iconColor}`} />
                 </div>
