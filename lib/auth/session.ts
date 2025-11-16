@@ -28,23 +28,7 @@ export async function createSession(userId: string) {
 }
 
 export async function getSession(): Promise<SessionUser | null> {
-  const session = await auth.api.getSession({
-    headers: await cookies(),
-  })
-
-  if (!session?.user) {
-    return null
-  }
-
-  return {
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name || null,
-    image: session.user.image || null,
-    subscriptionTier: null,
-    subscriptionStatus: null,
-    trialEndsAt: null,
-  }
+  return null
 }
 
 export async function deleteSession() {
