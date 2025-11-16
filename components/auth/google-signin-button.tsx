@@ -1,9 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { signIn } from "next-auth/react"
+import { authClient } from "@/lib/auth-client"
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2 } from 'lucide-react'
 
 export function GoogleSignInButton() {
   const [isLoading, setIsLoading] = useState(false)
@@ -11,7 +11,10 @@ export function GoogleSignInButton() {
   const handleSignIn = async () => {
     setIsLoading(true)
     try {
-      await signIn("google", { callbackUrl: "/dashboard" })
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      })
     } catch (error) {
       console.error("[v0] Google sign in error:", error)
       setIsLoading(false)

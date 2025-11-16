@@ -12,8 +12,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@auth/core": "^0.34.3",
-    "@auth/drizzle-adapter": "^1.11.1",
     "@aws-sdk/client-rds-data": "latest",
     "@cloudflare/workers-types": "latest",
     "@electric-sql/pglite": "latest",
@@ -42,6 +40,7 @@
     "@vercel/postgres": "latest",
     "@xata.io/client": "latest",
     "bcryptjs": "latest",
+    "better-auth": "latest",
     "better-sqlite3": "latest",
     "bun-types": "latest",
     "class-variance-authority": "^0.7.1",
@@ -56,8 +55,7 @@
     "lucide-react": "^0.454.0",
     "mysql2": "latest",
     "next": "^16.0.0",
-    "next-auth": "latest",
-    "nodemailer": "latest",
+    "next-auth": "4.24.13",
     "path": "latest",
     "pg": "latest",
     "postgres": "latest",

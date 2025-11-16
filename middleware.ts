@@ -1,11 +1,30 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // For now, allow all requests through
-  // Auth will be handled by the auth system in the app
+  // Check if the request is for a protected dashboard route
+  if (pathname.startsWith("/dashboard")) {
+    try {
+      const session = await auth.api.getSession({
+        headers: request.headers,
+      })
+
+      // If no session, redirect to login
+      if (!session) {
+        const loginUrl = new URL("/login", request.url)
+        loginUrl.searchParams.set("callbackUrl", pathname)
+        return NextResponse.redirect(loginUrl)
+      }
+    } catch (error) {
+      // If there's an error checking the session, redirect to login
+      const loginUrl = new URL("/login", request.url)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
   return NextResponse.next()
 }
 

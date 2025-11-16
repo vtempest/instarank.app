@@ -1,9 +1,12 @@
 import { GoogleSignInButton } from "@/components/auth/google-signin-button"
+import { GoogleOneTap } from "@/components/auth/google-onetap"
 import Link from "next/link"
 
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
+      <GoogleOneTap />
+      
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link href="/" className="mb-6 inline-flex items-center gap-2">

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
 
 const SESSION_COOKIE_NAME = "session"
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -28,20 +28,22 @@ export async function createSession(userId: string) {
 }
 
 export async function getSession(): Promise<SessionUser | null> {
-  const session = await auth()
+  const session = await auth.api.getSession({
+    headers: await cookies(),
+  })
 
   if (!session?.user) {
     return null
   }
 
   return {
-    id: session.user.id as string,
-    email: session.user.email as string,
+    id: session.user.id,
+    email: session.user.email,
     name: session.user.name || null,
     image: session.user.image || null,
-    subscriptionTier: (session.user as any).subscriptionTier || null,
-    subscriptionStatus: (session.user as any).subscriptionStatus || null,
-    trialEndsAt: (session.user as any).trialEndsAt || null,
+    subscriptionTier: null,
+    subscriptionStatus: null,
+    trialEndsAt: null,
   }
 }
 
