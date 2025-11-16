@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { SessionUser } from "@/lib/auth/session"
-import { logout } from "@/lib/auth/actions"
 
 const navigation = [
   {
@@ -67,7 +66,12 @@ export function AppSidebar({ user, isDemo = false, ...props }: AppSidebarProps) 
   const [isPending, startTransition] = React.useTransition()
 
   const handleLogout = () => {
+    if (isDemo) {
+      window.location.href = '/'
+      return
+    }
     startTransition(async () => {
+      const { logout } = await import("@/lib/auth/actions")
       await logout()
     })
   }
