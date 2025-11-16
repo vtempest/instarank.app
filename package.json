@@ -55,7 +55,6 @@
     "lucide-react": "^0.454.0",
     "mysql2": "latest",
     "next": "^16.0.0",
-    "next-auth": "4.24.13",
     "path": "latest",
     "pg": "latest",
     "postgres": "latest",
