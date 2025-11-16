@@ -64,6 +64,7 @@
     "prettier": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "latest",
     "resend": "latest",
     "sql.js": "latest",
     "sqlite3": "latest",

@@ -13,11 +13,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/logo-instarank.png',
+        url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png',
         type: 'image/png',
       },
     ],
-    apple: '/apple-icon.png',
+    apple: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png',
   },
 }
 

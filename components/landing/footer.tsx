@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -8,7 +9,13 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="mb-4 flex items-center gap-2">
-              <img src="/logo-instarank.png" alt="InstaRank" className="h-8 w-8 rounded-lg" />
+              <Image 
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png" 
+                alt="InstaRank" 
+                width={32}
+                height={32}
+                className="h-8 w-8 rounded-lg" 
+              />
               <span className="text-xl font-bold text-foreground">InstaRank</span>
             </Link>
             <p className="text-sm text-muted-foreground">

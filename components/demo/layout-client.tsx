@@ -17,7 +17,7 @@ interface DemoDashboardLayoutClientProps {
 export function DemoDashboardLayoutClient({ user, children }: DemoDashboardLayoutClientProps) {
   return (
     <SidebarProvider>
-      <AppSidebar user={user} />
+      <AppSidebar user={user} isDemo={true} />
       <SidebarInset>
         <div className="border-b bg-primary/5">
           <div className="container mx-auto flex items-center justify-between px-4 py-2">

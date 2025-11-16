@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, TrendingUp, Zap, Target, Eye } from 'lucide-react'
 
@@ -57,7 +58,13 @@ export function HeroSection() {
 
         <div className="mx-auto mt-16 max-w-5xl">
           <div className="relative aspect-video overflow-hidden rounded-xl border-4 border-primary/30 bg-muted shadow-2xl ring-4 ring-primary/10">
-            <img src="/dashboard-preview.png" alt="InstaRank Dashboard Preview" className="h-full w-full object-cover" />
+            <Image 
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-00MKLfTQfpEb7W4N9URAhaFO784Ykh.png" 
+              alt="InstaRank Dashboard Preview" 
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
         </div>
       </div>

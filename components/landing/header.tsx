@@ -8,7 +8,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Image 
-            src="/logo-instarank.png" 
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png" 
             alt="InstaRank Logo" 
             width={40} 
             height={40}

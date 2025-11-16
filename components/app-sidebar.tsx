@@ -59,9 +59,10 @@ const navigation = [
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: SessionUser
+  isDemo?: boolean
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AppSidebar({ user, isDemo = false, ...props }: AppSidebarProps) {
   const pathname = usePathname()
   const [isPending, startTransition] = React.useTransition()
 
@@ -80,6 +81,8 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const isTrialActive = user.subscriptionStatus === "trial"
   const tierDisplay = user.subscriptionTier || "free"
 
+  const basePath = isDemo ? "/demo" : "/dashboard"
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -89,7 +92,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Image
-                    src="/logo-instarank.png"
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png"
                     alt="InstaRank"
                     width={32}
                     height={32}
@@ -114,11 +117,12 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <SidebarMenu>
                 {section.items.map((item) => {
                   const Icon = item.icon
-                  const isActive = pathname === item.href
+                  const href = item.href.replace("/dashboard", basePath)
+                  const isActive = pathname === href
                   return (
                     <SidebarMenuItem key={item.name}>
                       <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={item.href}>
+                        <Link href={href}>
                           <Icon />
                           <span>{item.name}</span>
                         </Link>
