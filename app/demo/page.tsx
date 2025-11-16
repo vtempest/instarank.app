@@ -1,3 +1,4 @@
+"use client"
 import { demoStats, demoProducts, demoRecentActivity } from "@/lib/demo-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package, Store, Search, FileText, Clock, TrendingUp } from 'lucide-react'
