@@ -8,9 +8,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="mb-4 flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <span className="text-lg font-bold text-white">IR</span>
-              </div>
+              <img src="/logo-instarank.png" alt="InstaRank" className="h-8 w-8 rounded-lg" />
               <span className="text-xl font-bold text-foreground">InstaRank</span>
             </Link>
             <p className="text-sm text-muted-foreground">

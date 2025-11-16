@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, TrendingUp, Zap, Target } from 'lucide-react'
+import { ArrowRight, TrendingUp, Zap, Target, Eye } from 'lucide-react'
 
 export function HeroSection() {
   return (
@@ -15,24 +15,26 @@ export function HeroSection() {
 
           {/* Headline */}
           <h1 className="mb-6 text-balance text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl">
-            Dominate Amazon with <span className="text-primary">AI-Powered</span> SEO & Marketing
+            Rank #1 on Amazon with <span className="text-primary">AI Agents</span> Working 24/7
           </h1>
 
           {/* Subheadline */}
           <p className="mb-8 text-pretty text-lg text-muted-foreground md:text-xl lg:text-2xl">
-            End-to-end automation from competitor intelligence to content generation. Save 15-20 hours weekly and
-            increase sales by up to 56%.
+            Deploy specialized AI agents that automate competitor research, keyword discovery, content creation, and listing optimization. Scale your Amazon business while you sleep.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="w-full sm:w-auto" asChild>
               <Link href="/dashboard">
-                Launch Demo
+                Launch Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full bg-transparent sm:w-auto" asChild>
-              <Link href="#features">See How It Works</Link>
+              <Link href="/demo">
+                <Eye className="mr-2 h-5 w-5" />
+                See Demo
+              </Link>
             </Button>
           </div>
 

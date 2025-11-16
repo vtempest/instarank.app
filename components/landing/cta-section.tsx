@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Eye } from 'lucide-react'
 import Link from "next/link"
 
 export function CTASection() {
@@ -16,7 +16,7 @@ export function CTASection() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
               <Link href="/dashboard">
-                Launch Demo
+                Launch Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -26,7 +26,10 @@ export function CTASection() {
               className="w-full border-2 border-white bg-transparent text-white hover:bg-white/10 sm:w-auto"
               asChild
             >
-              <Link href="#features">Learn More</Link>
+              <Link href="/demo">
+                <Eye className="mr-2 h-5 w-5" />
+                See Demo
+              </Link>
             </Button>
           </div>
         </div>
