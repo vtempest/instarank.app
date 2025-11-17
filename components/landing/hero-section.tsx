@@ -26,7 +26,7 @@ export function HeroSection() {
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="w-full sm:w-auto" asChild>
-              <Link href="/dashboard">
+              <Link href="/login?callbackUrl=/dashboard">
                 Launch Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>

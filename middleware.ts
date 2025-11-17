@@ -5,24 +5,10 @@ import { auth } from "@/lib/auth"
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Check if the request is for a protected dashboard route
   if (pathname.startsWith("/dashboard")) {
-    try {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      })
-
-      // If no session, redirect to login
-      if (!session) {
-        const loginUrl = new URL("/login", request.url)
-        loginUrl.searchParams.set("callbackUrl", pathname)
-        return NextResponse.redirect(loginUrl)
-      }
-    } catch (error) {
-      // If there's an error checking the session, redirect to login
-      const loginUrl = new URL("/login", request.url)
-      return NextResponse.redirect(loginUrl)
-    }
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("callbackUrl", pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()
