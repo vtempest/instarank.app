@@ -1,12 +1,7 @@
 import { betterAuth } from "better-auth"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { oneTap } from "better-auth/plugins"
-import { getDb } from "./db"
 
 export const auth = betterAuth({
-  database: drizzleAdapter(getDb(), {
-    provider: "pg",
-  }),
   emailAndPassword: {
     enabled: true,
   },
