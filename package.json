@@ -47,6 +47,7 @@
     "@vitest/browser-webdriverio": "latest",
     "@xata.io/client": "latest",
     "bcryptjs": "latest",
+    "better-auth": "latest",
     "better-sqlite3": "latest",
     "bun-types": "latest",
     "class-variance-authority": "^0.7.1",

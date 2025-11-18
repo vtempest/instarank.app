@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { GradientButton } from "@/components/ui/gradient-button"
 import { ArrowRight, TrendingUp, Zap, Target, Eye } from 'lucide-react'
 
 export function HeroSection() {
@@ -9,9 +10,16 @@ export function HeroSection() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-            <Zap className="h-4 w-4" />
-            <span>AI-Powered Amazon Optimization</span>
+          <div className="mb-6 inline-block">
+            <GradientButton>
+              <Zap className="mr-2 h-4 w-4" />
+              <span 
+                className="animate-[shimmer_8s_infinite] bg-gradient-to-r from-transparent via-foreground via-50% to-transparent bg-clip-text bg-no-repeat text-transparent [background-position:0_0] [background-size:100px_100%]"
+                style={{ '--shimmer-width': '100px' } as React.CSSProperties}
+              >
+                Agentic Workflow for Product Optimization
+              </span>
+            </GradientButton>
           </div>
 
           {/* Headline */}
