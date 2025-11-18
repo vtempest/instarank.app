@@ -4,6 +4,7 @@ import { stores, products, keywords, generatedContent } from "@/lib/db/schema"
 import { eq, count } from "drizzle-orm"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package, Store, Search, FileText, TrendingUp, Clock } from 'lucide-react'
+import { BorderBeam } from "@/components/ui/border-beam"
 
 export default async function DashboardPage() {
   const session = await getSession()
@@ -111,10 +112,10 @@ export default async function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
+        {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Card key={stat.title}>
+            <Card key={stat.title} className="relative overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.bgColor}`}>
@@ -125,6 +126,13 @@ export default async function DashboardPage() {
                 <div className="text-3xl font-bold text-foreground">{stat.value}</div>
                 <p className="mt-1 text-xs text-muted-foreground">{stat.description}</p>
               </CardContent>
+              <BorderBeam 
+                size={250}
+                duration={12}
+                delay={index * 2}
+                colorFrom={index === 0 ? "#3b82f6" : index === 1 ? "#10b981" : index === 2 ? "#a855f7" : "#f97316"}
+                colorTo={index === 0 ? "#06b6d4" : index === 1 ? "#34d399" : index === 2 ? "#c084fc" : "#fb923c"}
+              />
             </Card>
           )
         })}
@@ -132,7 +140,7 @@ export default async function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>Get started with InstaRank</CardDescription>
@@ -169,9 +177,10 @@ export default async function DashboardPage() {
               </div>
             </a>
           </CardContent>
+          <BorderBeam size={300} duration={15} colorFrom="#a855f7" colorTo="#ec4899" />
         </Card>
 
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
             <CardDescription>Your latest actions</CardDescription>
@@ -181,11 +190,12 @@ export default async function DashboardPage() {
               No recent activity yet. Start by connecting your store!
             </div>
           </CardContent>
+          <BorderBeam size={300} duration={15} delay={2} colorFrom="#3b82f6" colorTo="#06b6d4" />
         </Card>
       </div>
 
       {/* Performance Overview */}
-      <Card>
+      <Card className="relative overflow-hidden">
         <CardHeader>
           <CardTitle>Performance Overview</CardTitle>
           <CardDescription>Track your optimization progress</CardDescription>
@@ -198,6 +208,7 @@ export default async function DashboardPage() {
             </div>
           </div>
         </CardContent>
+        <BorderBeam size={400} duration={18} colorFrom="#10b981" colorTo="#34d399" />
       </Card>
     </div>
   )

@@ -5,6 +5,7 @@ import { Package, Store, Search, FileText, Clock, TrendingUp } from 'lucide-reac
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 export default function DemoPage() {
   const stats = [
@@ -69,10 +70,10 @@ export default function DemoPage() {
 
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
+        {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Card key={stat.title}>
+            <Card key={stat.title} className="relative overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.bgColor}`}>
@@ -83,6 +84,13 @@ export default function DemoPage() {
                 <div className="text-3xl font-bold text-foreground">{stat.value}</div>
                 <p className="mt-1 text-xs text-muted-foreground">{stat.description}</p>
               </CardContent>
+              <BorderBeam 
+                size={250}
+                duration={12}
+                delay={index * 2}
+                colorFrom={index === 0 ? "#3b82f6" : index === 1 ? "#10b981" : index === 2 ? "#a855f7" : "#f97316"}
+                colorTo={index === 0 ? "#06b6d4" : index === 1 ? "#34d399" : index === 2 ? "#c084fc" : "#fb923c"}
+              />
             </Card>
           )
         })}
@@ -90,7 +98,7 @@ export default function DemoPage() {
 
       {/* Products & Activity */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Active Products</CardTitle>
             <CardDescription>Products currently being optimized</CardDescription>
@@ -108,9 +116,10 @@ export default function DemoPage() {
               </div>
             ))}
           </CardContent>
+          <BorderBeam size={300} duration={15} colorFrom="#10b981" colorTo="#34d399" />
         </Card>
 
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
             <CardDescription>Your latest AI agent actions</CardDescription>
@@ -131,11 +140,12 @@ export default function DemoPage() {
               </div>
             ))}
           </CardContent>
+          <BorderBeam size={300} duration={15} delay={2} colorFrom="#a855f7" colorTo="#ec4899" />
         </Card>
       </div>
 
       {/* CTA */}
-      <Card className="bg-primary text-white">
+      <Card className="relative overflow-hidden bg-primary text-white">
         <CardContent className="flex flex-col items-center justify-center gap-4 p-8 text-center">
           <h3 className="text-2xl font-bold">Ready to Optimize Your Real Amazon Store?</h3>
           <p className="text-white/90">
@@ -146,6 +156,7 @@ export default function DemoPage() {
             <Link href="/signup">Start Your Free Trial</Link>
           </Button>
         </CardContent>
+        <BorderBeam size={400} duration={18} colorFrom="#fbbf24" colorTo="#f59e0b" />
       </Card>
     </div>
   )

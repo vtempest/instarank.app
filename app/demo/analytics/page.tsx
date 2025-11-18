@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { BorderBeam } from "@/components/ui/border-beam"
 import { demoAnalytics } from "@/lib/demo-data"
 import { TrendingUp, Clock, Target, FileText } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
@@ -15,7 +16,7 @@ export default function DemoAnalyticsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Sales Increase</CardTitle>
             <TrendingUp className="h-4 w-4 text-green-500" />
@@ -24,8 +25,9 @@ export default function DemoAnalyticsPage() {
             <div className="text-2xl font-bold">+{demoAnalytics.salesIncrease}%</div>
             <p className="text-xs text-muted-foreground">Since optimization started</p>
           </CardContent>
+          <BorderBeam size={200} duration={10} colorFrom="#10b981" colorTo="#34d399" />
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Time Saved</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
@@ -34,8 +36,9 @@ export default function DemoAnalyticsPage() {
             <div className="text-2xl font-bold">{demoAnalytics.timeSaved}h</div>
             <p className="text-xs text-muted-foreground">This month</p>
           </CardContent>
+          <BorderBeam size={200} duration={10} delay={2} colorFrom="#3b82f6" colorTo="#06b6d4" />
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Keywords Ranked</CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
@@ -44,8 +47,9 @@ export default function DemoAnalyticsPage() {
             <div className="text-2xl font-bold">{demoAnalytics.keywordsRanked}</div>
             <p className="text-xs text-muted-foreground">In top 10 positions</p>
           </CardContent>
+          <BorderBeam size={200} duration={10} delay={4} colorFrom="#a855f7" colorTo="#c084fc" />
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Content Generated</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
@@ -54,11 +58,12 @@ export default function DemoAnalyticsPage() {
             <div className="text-2xl font-bold">{demoAnalytics.contentGenerated}</div>
             <p className="text-xs text-muted-foreground">Optimized listings</p>
           </CardContent>
+          <BorderBeam size={200} duration={10} delay={6} colorFrom="#f97316" colorTo="#fb923c" />
         </Card>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Sales Performance</CardTitle>
             <CardDescription>Weekly sales growth since using InstaRank</CardDescription>
@@ -74,9 +79,10 @@ export default function DemoAnalyticsPage() {
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
+          <BorderBeam size={350} duration={16} colorFrom="#10b981" colorTo="#34d399" />
         </Card>
 
-        <Card>
+        <Card className="relative overflow-hidden">
           <CardHeader>
             <CardTitle>Keyword Rankings</CardTitle>
             <CardDescription>Keywords ranking in top 10 by week</CardDescription>
@@ -92,10 +98,11 @@ export default function DemoAnalyticsPage() {
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
+          <BorderBeam size={350} duration={16} delay={2} colorFrom="#a855f7" colorTo="#c084fc" />
         </Card>
       </div>
 
-      <Card>
+      <Card className="relative overflow-hidden">
         <CardHeader>
           <CardTitle>Performance Summary</CardTitle>
           <CardDescription>Key metrics from your optimization journey</CardDescription>
@@ -123,6 +130,7 @@ export default function DemoAnalyticsPage() {
             <Badge className="text-lg">+34%</Badge>
           </div>
         </CardContent>
+        <BorderBeam size={400} duration={18} colorFrom="#3b82f6" colorTo="#06b6d4" />
       </Card>
     </div>
   )

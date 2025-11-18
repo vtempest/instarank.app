@@ -1,0 +1,690 @@
+openapi: 3.0.3
+info:
+  title: InstaRank API
+  description: |
+    InstaRank is an AI-powered platform that helps Amazon sellers optimize their product rankings 
+    through automated competitor tracking, keyword analysis, content optimization, and social media management.
+  version: 1.0.0
+  contact:
+    name: InstaRank Support
+    url: https://instarank.com/support
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://instarank.com/api
+    description: Production server
+  - url: http://localhost:3000/api
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Stores
+    description: Amazon store management
+  - name: Products
+    description: Product tracking and management
+  - name: Competitors
+    description: Competitor intelligence and tracking
+  - name: Keywords
+    description: Keyword research and ranking
+  - name: Content
+    description: Content generation and optimization
+  - name: Social Media
+    description: Social media automation
+  - name: Analytics
+    description: Performance analytics and insights
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth_session
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+        subscription:
+          type: string
+          enum: [free, pro, enterprise]
+        createdAt:
+          type: string
+          format: date-time
+
+    Store:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        marketplace:
+          type: string
+          enum: [US, UK, CA, DE, FR, IT, ES, JP, IN]
+        sellerId:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive, suspended]
+        connectedAt:
+          type: string
+          format: date-time
+        metrics:
+          type: object
+          properties:
+            totalProducts:
+              type: integer
+            totalSales:
+              type: number
+            avgRating:
+              type: number
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        storeId:
+          type: string
+          format: uuid
+        asin:
+          type: string
+          pattern: '^[A-Z0-9]{10}$'
+        title:
+          type: string
+        price:
+          type: number
+        currentRank:
+          type: integer
+        targetRank:
+          type: integer
+        rating:
+          type: number
+        reviews:
+          type: integer
+        salesVelocity:
+          type: integer
+        lastOptimized:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [active, monitoring, paused]
+
+    Competitor:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        asin:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        rank:
+          type: integer
+        rating:
+          type: number
+        reviews:
+          type: integer
+        salesEstimate:
+          type: integer
+        lastUpdated:
+          type: string
+          format: date-time
+
+    Keyword:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        keyword:
+          type: string
+        searchVolume:
+          type: integer
+        competition:
+          type: string
+          enum: [low, medium, high]
+        cpc:
+          type: number
+        currentRank:
+          type: integer
+        targetRank:
+          type: integer
+        trend:
+          type: string
+          enum: [up, down, stable]
+
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [competitor_detected, keyword_update, rank_change, optimization_completed]
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        statusCode:
+          type: integer
+
+security:
+  - bearerAuth: []
+  - cookieAuth: []
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - name
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+        '400':
+          description: Invalid input or user already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout current user
+      responses:
+        '200':
+          description: Successfully logged out
+
+  /stores:
+    get:
+      tags:
+        - Stores
+      summary: List all stores
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of stores
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stores:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Store'
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  limit:
+                    type: integer
+
+    post:
+      tags:
+        - Stores
+      summary: Connect new store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - marketplace
+                - sellerId
+              properties:
+                name:
+                  type: string
+                marketplace:
+                  type: string
+                sellerId:
+                  type: string
+      responses:
+        '201':
+          description: Store connected successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '400':
+          description: Invalid store data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stores/{storeId}:
+    get:
+      tags:
+        - Stores
+      summary: Get store details
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Store details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products:
+    get:
+      tags:
+        - Products
+      summary: List all products
+      parameters:
+        - name: storeId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, monitoring, paused]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  total:
+                    type: integer
+
+    post:
+      tags:
+        - Products
+      summary: Add product for tracking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - storeId
+                - asin
+              properties:
+                storeId:
+                  type: string
+                  format: uuid
+                asin:
+                  type: string
+                targetRank:
+                  type: integer
+      responses:
+        '201':
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Get product details
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /competitors:
+    get:
+      tags:
+        - Competitors
+      summary: List competitors
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: List of competitors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  competitors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Competitor'
+                  total:
+                    type: integer
+
+    post:
+      tags:
+        - Competitors
+      summary: Add competitor to track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+                - asin
+              properties:
+                productId:
+                  type: string
+                  format: uuid
+                asin:
+                  type: string
+      responses:
+        '201':
+          description: Competitor added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competitor'
+
+  /keywords:
+    get:
+      tags:
+        - Keywords
+      summary: List keywords
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: competition
+          in: query
+          schema:
+            type: string
+            enum: [low, medium, high]
+      responses:
+        '200':
+          description: List of keywords
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keywords:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Keyword'
+                  total:
+                    type: integer
+
+    post:
+      tags:
+        - Keywords
+      summary: Research keywords
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+                - seedKeywords
+              properties:
+                productId:
+                  type: string
+                  format: uuid
+                seedKeywords:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Keywords researched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Keyword'
+
+  /analytics/overview:
+    get:
+      tags:
+        - Analytics
+      summary: Get analytics overview
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [7d, 30d, 90d]
+            default: 30d
+      responses:
+        '200':
+          description: Analytics overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revenue:
+                    type: object
+                    properties:
+                      current:
+                        type: number
+                      previous:
+                        type: number
+                      change:
+                        type: number
+                  rank:
+                    type: object
+                    properties:
+                      average:
+                        type: number
+                      improved:
+                        type: integer
+                      declined:
+                        type: integer
+                  competitors:
+                    type: object
+                    properties:
+                      tracked:
+                        type: integer
+                      newThisWeek:
+                        type: integer
+                  keywords:
+                    type: object
+                    properties:
+                      ranked:
+                        type: integer
+                      topTen:
+                        type: integer
+
+  /activities:
+    get:
+      tags:
+        - Analytics
+      summary: Get recent activities
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Recent activities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  activities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Activity'

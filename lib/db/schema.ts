@@ -181,6 +181,53 @@ export const usageTracking = pgTable("usage_tracking", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
+// Analytics and tracking tables
+export const rankHistory = pgTable("rank_history", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .notNull(),
+  rank: integer("rank").notNull(),
+  date: timestamp("date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const salesData = pgTable("sales_data", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .notNull(),
+  estimatedSales: integer("estimated_sales"),
+  revenue: decimal("revenue", { precision: 12, scale: 2 }),
+  date: timestamp("date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const keywordRankings = pgTable("keyword_rankings", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  keywordId: uuid("keyword_id")
+    .references(() => keywords.id, { onDelete: "cascade" })
+    .notNull(),
+  position: integer("position").notNull(),
+  date: timestamp("date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const aiAgentRuns = pgTable("ai_agent_runs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  agentType: varchar("agent_type", { length: 50 }).notNull(), // competitor, keyword, content, social, analytics
+  status: varchar("status", { length: 50 }).default("running"), // running, completed, failed
+  inputData: jsonb("input_data"),
+  outputData: jsonb("output_data"),
+  errorMessage: text("error_message"),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   stores: many(stores),
@@ -207,6 +254,8 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   competitors: many(competitors),
   keywords: many(keywords),
   generatedContent: many(generatedContent),
+  rankHistory: many(rankHistory),
+  salesData: many(salesData),
 }))
 
 export const competitorsRelations = relations(competitors, ({ one }) => ({
@@ -221,6 +270,7 @@ export const keywordsRelations = relations(keywords, ({ one }) => ({
     fields: [keywords.productId],
     references: [products.id],
   }),
+  keywordRankings: many(keywordRankings),
 }))
 
 export const generatedContentRelations = relations(generatedContent, ({ one }) => ({
@@ -258,6 +308,34 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, {
     fields: [sessions.userId],
+    references: [users.id],
+  }),
+}))
+
+export const rankHistoryRelations = relations(rankHistory, ({ one }) => ({
+  product: one(products, {
+    fields: [rankHistory.productId],
+    references: [products.id],
+  }),
+}))
+
+export const salesDataRelations = relations(salesData, ({ one }) => ({
+  product: one(products, {
+    fields: [salesData.productId],
+    references: [products.id],
+  }),
+}))
+
+export const keywordRankingsRelations = relations(keywordRankings, ({ one }) => ({
+  keyword: one(keywords, {
+    fields: [keywordRankings.keywordId],
+    references: [keywords.id],
+  }),
+}))
+
+export const aiAgentRunsRelations = relations(aiAgentRuns, ({ one }) => ({
+  user: one(users, {
+    fields: [aiAgentRuns.userId],
     references: [users.id],
   }),
 }))

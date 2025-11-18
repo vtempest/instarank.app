@@ -87,9 +87,11 @@ export function FeaturesSection() {
                 className={`group relative overflow-hidden rounded-lg border-2 ${feature.borderColor} bg-background p-6 transition-all hover:shadow-xl hover:shadow-${feature.borderColor}/20`}
               >
                 <BorderBeam
-                  size={250}
-                  duration={12}
-                  delay={index * 2}
+                  size={300}
+                  duration={15}
+                  delay={index * 2.5}
+                  borderWidth={2}
+                  anchor={90}
                   colorFrom={feature.beamFrom}
                   colorTo={feature.beamTo}
                 />
