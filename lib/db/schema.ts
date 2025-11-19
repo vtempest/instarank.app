@@ -42,6 +42,7 @@ export const accounts = pgTable(
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
+    expires_in: integer("expires_in"), // Added expires_in for better-auth compatibility
     token_type: varchar("token_type", { length: 255 }),
     scope: varchar("scope", { length: 255 }),
     id_token: text("id_token"),
@@ -61,7 +62,10 @@ export const sessions = pgTable("sessions", {
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   expires: timestamp("expires").notNull(),
+  ipAddress: varchar("ip_address", { length: 255 }), // Added fields for better-auth session tracking
+  userAgent: text("user_agent"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 })
 
 // Amazon stores
@@ -227,6 +231,21 @@ export const aiAgentRuns = pgTable("ai_agent_runs", {
   completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+// Email verification tokens table
+export const verificationTokens = pgTable(
+  "verification_tokens",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
+    expires: timestamp("expires").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.identifier, table.token] }),
+  }),
+)
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({

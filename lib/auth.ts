@@ -1,14 +1,28 @@
 import { betterAuth } from "better-auth"
 import { oneTap } from "better-auth/plugins"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { db } from "./db"
+import * as schema from "./db/schema"
 
 export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: {
+      user: schema.users,
+      session: schema.sessions,
+      account: schema.accounts,
+      verification: schema.verificationTokens,
+    },
+  }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: false, // Set to true if you want email verification
   },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/auth/callback/google`,
     },
   },
   plugins: [
@@ -16,6 +30,10 @@ export const auth = betterAuth({
   ],
   secret: process.env.BETTER_AUTH_SECRET || "default-secret-for-development",
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    "http://localhost:3000",
+  ],
 })
 
 export const authAPI = auth.api
