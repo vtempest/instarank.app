@@ -11,10 +11,12 @@ export function GoogleSignInButton() {
   const handleSignIn = async () => {
     setIsLoading(true)
     try {
+      console.log("[v0] Initiating Google OAuth redirect...")
       await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       })
+      // Note: User will be redirected to Google, so code won't reach here
     } catch (error) {
       console.error("[v0] Google sign in error:", error)
       setIsLoading(false)
@@ -32,7 +34,7 @@ export function GoogleSignInButton() {
       {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Signing in...
+          Redirecting to Google...
         </>
       ) : (
         <>

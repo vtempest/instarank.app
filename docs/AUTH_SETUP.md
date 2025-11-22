@@ -41,10 +41,10 @@ The following tables support authentication:
 
 ## Authentication Flow
 
-### Google OAuth Sign In
+### Google OAuth Sign In (Standard Redirect Flow)
 
 1. User clicks "Continue with Google" button
-2. `GoogleSignInButton` calls `authClient.signIn.social({ provider: "google" })`
+2. `GoogleSignInButton` calls `authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" })`
 3. User is redirected to Google's OAuth consent screen
 4. After approval, Google redirects to `/api/auth/callback/google`
 5. better-auth creates/updates user account and session
