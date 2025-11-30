@@ -19,7 +19,7 @@ export const users = pgTable("users", {
   name: varchar("name", { length: 255 }),
   passwordHash: text("password_hash"),
   image: text("image"),
-  emailVerified: timestamp("email_verified"),
+  emailVerified: timestamp("email_verified", { mode: "date" }),
   subscriptionTier: varchar("subscription_tier", { length: 50 }).default("starter"), // free, starter, growth, professional, enterprise
   subscriptionStatus: varchar("subscription_status", { length: 50 }).default("trial"), // active, inactive, cancelled, past_due, trial
   stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
@@ -32,7 +32,6 @@ export const users = pgTable("users", {
 export const accounts = pgTable(
   "accounts",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
     userId: uuid("user_id")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
@@ -42,13 +41,10 @@ export const accounts = pgTable(
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
-    expires_in: integer("expires_in"), // Added expires_in for better-auth compatibility
     token_type: varchar("token_type", { length: 255 }),
     scope: varchar("scope", { length: 255 }),
     id_token: text("id_token"),
     session_state: varchar("session_state", { length: 255 }),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
     compoundKey: primaryKey({ columns: [table.provider, table.providerAccountId] }),
@@ -56,16 +52,11 @@ export const accounts = pgTable(
 )
 
 export const sessions = pgTable("sessions", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  sessionToken: varchar("session_token", { length: 255 }).notNull().unique(),
+  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
   userId: uuid("user_id")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  expires: timestamp("expires").notNull(),
-  ipAddress: varchar("ip_address", { length: 255 }), // Added fields for better-auth session tracking
-  userAgent: text("user_agent"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
 })
 
 // Amazon stores
@@ -236,11 +227,9 @@ export const aiAgentRuns = pgTable("ai_agent_runs", {
 export const verificationTokens = pgTable(
   "verification_tokens",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (table) => ({
     compoundKey: primaryKey({ columns: [table.identifier, table.token] }),
@@ -284,7 +273,7 @@ export const competitorsRelations = relations(competitors, ({ one }) => ({
   }),
 }))
 
-export const keywordsRelations = relations(keywords, ({ one }) => ({
+export const keywordsRelations = relations(keywords, ({ one, many }) => ({
   product: one(products, {
     fields: [keywords.productId],
     references: [products.id],
