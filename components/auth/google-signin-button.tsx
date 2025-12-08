@@ -1,17 +1,61 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { authClient } from "@/lib/auth-client"
+import { useState, useEffect } from "react"
 import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function GoogleSignInButton() {
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  // Initialize Google One Tap
+  useEffect(() => {
+    const initGoogleOneTap = async () => {
+      const script = document.createElement("script")
+      script.src = "https://accounts.google.com/gsi/client"
+      script.async = true
+      script.defer = true
+      document.body.appendChild(script)
+
+      script.onload = () => {
+        if (window.google) {
+          window.google.accounts.id.initialize({
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+            callback: async (response: any) => {
+              try {
+                await authClient.signIn.social({
+                  provider: "google",
+                  idToken: response.credential,
+                })
+                router.push("/dashboard")
+              } catch (error) {
+                console.error("Google One Tap sign in error:", error)
+              }
+            },
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          })
+          window.google.accounts.id.prompt()
+        }
+      }
+
+      return () => {
+        document.body.removeChild(script)
+      }
+    }
+
+    initGoogleOneTap()
+  }, [router])
 
   const handleSignIn = async () => {
     setIsLoading(true)
     try {
-      await signIn("google", { callbackUrl: "/dashboard" })
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      })
     } catch (error) {
       console.error("Google sign in error:", error)
       setIsLoading(false)

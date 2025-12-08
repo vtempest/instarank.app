@@ -1,37 +1,43 @@
-import { cookies } from "next/headers"
 import { auth } from "@/lib/auth"
-
-const SESSION_COOKIE_NAME = "session"
-const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000 // 7 days
+import { headers } from "next/headers"
 
 export interface SessionUser {
   id: string
   email: string
   name: string | null
   image?: string | null
-  subscriptionTier: string | null
-  subscriptionStatus: string | null
+  subscriptionTier?: string | null
+  subscriptionStatus?: string | null
   trialEndsAt?: Date | null
 }
 
-export async function createSession(userId: string) {
-  const cookieStore = await cookies()
-
-  // Set session cookie with user ID
-  cookieStore.set(SESSION_COOKIE_NAME, userId, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: SESSION_DURATION / 1000,
-    path: "/",
-  })
+export interface Session {
+  user: SessionUser
+  session: {
+    sessionToken: string
+    userId: string
+    expiresAt: Date
+  }
 }
 
-export async function getSession(): Promise<SessionUser | null> {
-  return null
-}
+/**
+ * Get the current session from better-auth
+ * This function works in server components and API routes
+ */
+export async function getSession(): Promise<Session | null> {
+  try {
+    const headersList = await headers()
+    const session = await auth.api.getSession({
+      headers: headersList,
+    })
 
-export async function deleteSession() {
-  const cookieStore = await cookies()
-  cookieStore.delete(SESSION_COOKIE_NAME)
+    if (!session) {
+      return null
+    }
+
+    return session as Session
+  } catch (error) {
+    console.error("Error getting session:", error)
+    return null
+  }
 }
