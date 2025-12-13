@@ -61,7 +61,7 @@ export const auth = betterAuth({
     generateId: false, // Use database default UUID generation
     useSecureCookies: process.env.NODE_ENV === "production",
   },
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET || process.env.NEXTAUTH_SECRET!,
   trustedOrigins: [
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",

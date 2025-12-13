@@ -54,7 +54,7 @@ export function GoogleSignInButton() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "https://instarank.app/dashboard",
       })
     } catch (error) {
       console.error("Google sign in error:", error)
