@@ -29,7 +29,8 @@ export function GoogleSignInButton() {
                   provider: "google",
                   idToken: response.credential,
                 })
-                router.push("/dashboard")
+                // Use full page reload to ensure session cookie is sent to server
+                window.location.href = "/dashboard"
               } catch (error) {
                 console.error("Google One Tap sign in error:", error)
               }
@@ -54,7 +55,7 @@ export function GoogleSignInButton() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "https://instarank.app/dashboard",
+        callbackURL: "/dashboard",
       })
     } catch (error) {
       console.error("Google sign in error:", error)
