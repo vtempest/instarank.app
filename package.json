@@ -55,7 +55,7 @@
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-email/render": "latest",
-    "@scalar/api-reference": "^1.40.1",
+    "@scalar/api-reference-react": "latest",
     "@simplewebauthn/browser": "latest",
     "@simplewebauthn/server": "latest",
     "@tidbcloud/serverless": "latest",

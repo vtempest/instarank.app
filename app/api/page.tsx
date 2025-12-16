@@ -1,11 +1,12 @@
 "use client"
 
-import { ApiReference } from "@scalar/api-reference"
+import { ApiReferenceReact } from "@scalar/api-reference-react"
+import "@scalar/api-reference-react/style.css"
 import { openApiSpec } from "@/lib/openapi-spec"
 
 export default function ApiDocsPage() {
   return (
-    <ApiReference
+    <ApiReferenceReact
       configuration={{
         spec: {
           content: openApiSpec,
