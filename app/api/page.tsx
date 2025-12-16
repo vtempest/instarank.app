@@ -1,3 +1,5 @@
+"use client"
+
 import { ApiReference } from "@scalar/api-reference"
 import { openApiSpec } from "@/lib/openapi-spec"
 
