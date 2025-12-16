@@ -62,7 +62,7 @@ The following tables support authentication:
 
 Required environment variables:
 
-\`\`\`bash
+```bash
 # Better Auth
 BETTER_AUTH_SECRET=<random-secret-key>
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
@@ -74,7 +74,7 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=<your-google-client-id>
 
 # Database
 DATABASE_URL=<your-neon-database-url>
-\`\`\`
+```
 
 ## Google Cloud Console Setup
 
@@ -91,7 +91,7 @@ DATABASE_URL=<your-neon-database-url>
 
 ## Files Structure
 
-\`\`\`
+```
 lib/
 ├── auth.ts                    # Server-side auth configuration
 ├── auth-client.ts            # Client-side auth client
@@ -117,13 +117,13 @@ middleware.ts                 # Protects /dashboard routes
 
 scripts/
 └── 003-better-auth-schema.sql # Database migration for auth tables
-\`\`\`
+```
 
 ## Usage in Code
 
 ### Check if user is signed in (Server Component)
 
-\`\`\`typescript
+```typescript
 import { getSession } from "@/lib/auth"
 
 export default async function Page() {
@@ -136,11 +136,11 @@ export default async function Page() {
   
   return <div>Welcome, {user.name}!</div>
 }
-\`\`\`
+```
 
 ### Check if user is signed in (Client Component)
 
-\`\`\`typescript
+```typescript
 "use client"
 
 import { useSession } from "@/lib/auth-client"
@@ -158,11 +158,11 @@ export function UserProfile() {
   
   return <div>Welcome, {session.user.name}!</div>
 }
-\`\`\`
+```
 
 ### Sign Out
 
-\`\`\`typescript
+```typescript
 "use client"
 
 import { authClient } from "@/lib/auth-client"
@@ -175,13 +175,13 @@ export function SignOutButton() {
   
   return <button onClick={handleSignOut}>Sign Out</button>
 }
-\`\`\`
+```
 
 ## Middleware Protection
 
 The `middleware.ts` file protects all `/dashboard` routes:
 
-\`\`\`typescript
+```typescript
 export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/dashboard")) {
     const sessionToken = request.cookies.get("better-auth.session_token")
@@ -194,7 +194,7 @@ export async function middleware(request: NextRequest) {
   
   return NextResponse.next()
 }
-\`\`\`
+```
 
 ## Testing
 

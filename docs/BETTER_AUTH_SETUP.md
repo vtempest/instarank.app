@@ -14,7 +14,7 @@ This application uses [BetterAuth](https://www.better-auth.com/) for authenticat
 
 Add these variables to your `.env.local` file:
 
-\`\`\`bash
+```bash
 # BetterAuth
 BETTER_AUTH_SECRET=your-secret-key-here-min-32-chars
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -27,7 +27,7 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 # Database (Neon PostgreSQL)
 DATABASE_URL=postgresql://user:password@host/dbname
 NEON_DATABASE_URL=postgresql://user:password@host/dbname
-\`\`\`
+```
 
 ## Google OAuth Setup
 
@@ -48,7 +48,7 @@ NEON_DATABASE_URL=postgresql://user:password@host/dbname
 
 BetterAuth requires specific tables. The required schema is:
 
-\`\`\`sql
+```sql
 -- Users table
 CREATE TABLE users (
   id TEXT PRIMARY KEY,
@@ -84,7 +84,7 @@ CREATE TABLE sessions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-\`\`\`
+```
 
 ## How It Works
 
@@ -92,7 +92,7 @@ CREATE TABLE sessions (
 
 The auth configuration is in `lib/auth.ts`:
 
-\`\`\`typescript
+```typescript
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { oneTap } from "better-auth/plugins"
@@ -107,13 +107,13 @@ export const auth = betterAuth({
   },
   plugins: [oneTap()],
 })
-\`\`\`
+```
 
 ### Client-Side Authentication
 
 The client configuration is in `lib/auth-client.ts`:
 
-\`\`\`typescript
+```typescript
 import { createAuthClient } from "better-auth/react"
 import { oneTapClient } from "better-auth/client/plugins"
 
@@ -124,13 +124,13 @@ export const authClient = createAuthClient({
     }),
   ],
 })
-\`\`\`
+```
 
 ### Protected Routes
 
 The `middleware.ts` file protects dashboard routes:
 
-\`\`\`typescript
+```typescript
 export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/dashboard")) {
     const session = await auth.api.getSession({
@@ -142,13 +142,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 }
-\`\`\`
+```
 
 ### Google One Tap
 
 The `GoogleOneTap` component automatically shows the One Tap dialog on login/signup pages:
 
-\`\`\`typescript
+```typescript
 await authClient.oneTap({
   fetchOptions: {
     onSuccess: () => {
@@ -156,48 +156,48 @@ await authClient.oneTap({
     },
   },
 })
-\`\`\`
+```
 
 ## Usage in Components
 
 ### Sign In
 
-\`\`\`typescript
+```typescript
 import { authClient } from "@/lib/auth-client"
 
 await authClient.signIn.social({
   provider: "google",
   callbackURL: "/dashboard",
 })
-\`\`\`
+```
 
 ### Sign Out
 
-\`\`\`typescript
+```typescript
 import { logout } from "@/lib/auth/actions"
 
 // In a server action or form
 await logout()
-\`\`\`
+```
 
 ### Get Session (Server)
 
-\`\`\`typescript
+```typescript
 import { getSession } from "@/lib/auth/session"
 
 const session = await getSession()
 if (session) {
   console.log(session.user.email)
 }
-\`\`\`
+```
 
 ### Get Session (Client)
 
-\`\`\`typescript
+```typescript
 import { useSession } from "@/lib/auth-client"
 
 const { data: session, isPending } = useSession()
-\`\`\`
+```
 
 ## Migration from NextAuth
 

@@ -18,7 +18,7 @@ Get all stores for the authenticated user.
 - `limit` (optional): Items per page (default: 10)
 
 **Response:**
-\`\`\`json
+```json
 {
   "success": true,
   "data": [...],
@@ -29,19 +29,19 @@ Get all stores for the authenticated user.
     "totalPages": 3
   }
 }
-\`\`\`
+```
 
 #### POST /api/stores
 Create a new store.
 
 **Body:**
-\`\`\`json
+```json
 {
   "name": "My Amazon Store",
   "marketplace": "US",
   "sellerId": "A1B2C3D4E5F6G"
 }
-\`\`\`
+```
 
 #### GET /api/stores/[id]
 Get a specific store with all products.
@@ -66,7 +66,7 @@ Get all products for the authenticated user.
 Create a new product.
 
 **Body:**
-\`\`\`json
+```json
 {
   "storeId": "uuid",
   "asin": "B08N5WRWNW",
@@ -77,7 +77,7 @@ Create a new product.
   "imageUrl": "https://...",
   "category": "Electronics"
 }
-\`\`\`
+```
 
 #### GET /api/products/[id]
 Get product details with competitors and keywords.
@@ -134,13 +134,13 @@ Record sales data.
 ## Error Responses
 
 All errors follow this format:
-\`\`\`json
+```json
 {
   "success": false,
   "error": "Error message",
   "errors": {} // Optional validation errors
 }
-\`\`\`
+```
 
 ## Rate Limiting
 - 100 requests per minute per user
