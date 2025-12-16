@@ -1,9 +1,13 @@
 "use client"
 
-import { ApiReference } from "@scalar/api-reference"
+import dynamic from "next/dynamic"
 import { openApiSpec } from "@/lib/openapi-spec"
 
-export const dynamic = 'force-dynamic'
+// Dynamically import ApiReference with no SSR to prevent build errors
+const ApiReference = dynamic(
+  () => import("@scalar/api-reference").then((mod) => mod.ApiReference),
+  { ssr: false }
+)
 
 export default function ApiDocsPage() {
   return (
