@@ -3,8 +3,23 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, Users, Search, FileText, Share2, BarChart3, Settings, Store, ChevronUp, User2, CreditCard, LogOut, Sparkles } from 'lucide-react'
+import { usePathname } from "next/navigation"
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  Search,
+  FileText,
+  Share2,
+  BarChart3,
+  Settings,
+  Store,
+  ChevronUp,
+  User2,
+  CreditCard,
+  LogOut,
+  Sparkles,
+} from "lucide-react"
 
 import {
   Sidebar,
@@ -17,7 +32,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuBadge,
 } from "@/components/ui/sidebar"
 import {
   DropdownMenu,
@@ -67,20 +81,22 @@ export function AppSidebar({ user, isDemo = false, ...props }: AppSidebarProps) 
 
   const handleLogout = () => {
     if (isDemo) {
-      window.location.href = '/'
+      window.location.href = "/"
       return
     }
     startTransition(async () => {
       const { logout } = await import("@/lib/auth/actions")
       await logout()
+      window.location.href = "/"
     })
   }
 
-  const userInitials = user.name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase() || user.email[0].toUpperCase()
+  const userInitials =
+    user.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || user.email[0].toUpperCase()
 
   const isTrialActive = user.subscriptionStatus === "trial"
   const tierDisplay = user.subscriptionTier || "free"
@@ -96,7 +112,7 @@ export function AppSidebar({ user, isDemo = false, ...props }: AppSidebarProps) 
               <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png"
+                    src="/images/logo-instarank.png"
                     alt="InstaRank"
                     width={32}
                     height={32}
@@ -163,7 +179,7 @@ export function AppSidebar({ user, isDemo = false, ...props }: AppSidebarProps) 
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
                 side="bottom"
                 align="end"
                 sideOffset={4}

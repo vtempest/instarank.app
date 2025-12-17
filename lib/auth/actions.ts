@@ -1,13 +1,11 @@
 "use server"
 
-import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
-
 export async function logout() {
-  const cookieStore = await cookies()
-  
-  // Clear the better-auth session cookie
-  cookieStore.delete("better-auth.session_token")
-  
-  redirect("/")
+  await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/sign-out`, {
+    method: "POST",
+    credentials: "include",
+  })
+
+  // Redirect handled by the client after action completes
+  return { success: true }
 }

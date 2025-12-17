@@ -1,12 +1,15 @@
-import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
-export default auth((req) => {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // Protect dashboard routes
   if (pathname.startsWith("/dashboard")) {
-    if (!req.auth) {
+    // Check for better-auth session token in cookies
+    const token = req.cookies.get("better-auth.session_token")
+
+    if (!token) {
       const loginUrl = new URL("/login", req.url)
       loginUrl.searchParams.set("callbackUrl", pathname)
       return NextResponse.redirect(loginUrl)
@@ -14,7 +17,7 @@ export default auth((req) => {
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: ["/dashboard/:path*"],
