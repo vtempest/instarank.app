@@ -236,6 +236,16 @@ export const verificationTokens = pgTable(
   }),
 )
 
+// Better-auth expects a verification table with id, identifier, value, expiresAt fields
+export const verification = pgTable("verification", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  identifier: varchar("identifier", { length: 255 }).notNull(),
+  value: varchar("value", { length: 255 }).notNull(),
+  expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   stores: many(stores),

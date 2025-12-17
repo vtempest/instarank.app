@@ -45,12 +45,12 @@ export const auth = betterAuth({
   secret: AUTH_SECRET, // Use the constant instead of function call
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   database: drizzleAdapter(db, {
-    provider: "pg",
+    provider: "pg", // Changed from sqlite to pg for PostgreSQL
     schema: {
       user: schema.users,
       session: schema.sessions,
       account: schema.accounts,
-      verification: schema.verificationTokens,
+      verification: schema.verification, // Changed from verificationTokens to verification
     },
   }),
   socialProviders: {

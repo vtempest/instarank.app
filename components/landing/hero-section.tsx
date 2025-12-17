@@ -3,7 +3,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { GradientButton } from "@/components/ui/gradient-button"
-import { AuroraText } from "@/components/ui/aurora-text"
 import { ArrowRight, TrendingUp, Zap, Target, Eye } from "lucide-react"
 
 export function HeroSection() {
@@ -25,11 +24,11 @@ export function HeroSection() {
           </div>
 
           {/* Headline */}
-          <h1 className="mb-6 text-balance text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl">
+          <h1 className="mb-6 text-balance text-4xl font-bold leading-tight tracking-tight text-foreground drop-shadow-lg md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_20%)]">
             Rank #1 on Google, Amazon & AI Search with{" "}
-            <AuroraText>
-              <span className="text-primary">AI Agents</span>
-            </AuroraText>{" "}
+            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+              AI Agents
+            </span>{" "}
             Working 24/7
           </h1>
 
