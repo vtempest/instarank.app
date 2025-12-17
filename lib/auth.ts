@@ -1,80 +1,122 @@
 import { betterAuth } from "better-auth"
-import type { NextAuthConfig } from "next-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { stripe } from "@better-auth/stripe"
+import Stripe from "stripe"
+import { db } from "./db"
+import * as schema from "./db/schema"
+import { headers } from "next/headers"
 
-export const authConfig: NextAuthConfig = {
-  providers: [
-    {
-      id: "google",
-      name: "Google",
-      type: "oauth",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-      authorization: {
-        params: {
-          scope: "openid email profile",
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-        }
-      },
-    },
-  ],
-  basePath: "/api/auth",
-  trustHost: true,
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      else if (new URL(url).origin === baseUrl) return url
-      return `${baseUrl}/dashboard`
-    },
-    async jwt({ token, account, profile }) {
-      if (account && profile) {
-        token.accessToken = account.access_token
-        token.id = profile.sub
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user && token) {
-        session.user.id = token.id as string
-      }
-      return session
-    },
-  },
-  session: {
-    strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60, // 7 days
-  },
-}
+const AUTH_SECRET =
+  process.env.BETTER_AUTH_SECRET ||
+  process.env.AUTH_SECRET ||
+  "development-secret-key-min-32-chars-CHANGE-IN-PRODUCTION-12345678"
 
-export const { handlers, auth, signIn, signOut } = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET!,
-  baseURL: process.env.NEXT_PUBLIC_APP_URL!,
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  typescript: true,
+})
+
+export const plans = [
+  {
+    id: "starter",
+    name: "Starter",
+    price: 29,
+    priceId: process.env.STRIPE_STARTER_PRICE_ID || "",
+    trialDays: 14,
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    price: 79,
+    priceId: process.env.STRIPE_GROWTH_PRICE_ID || "",
+    trialDays: 14,
+  },
+  {
+    id: "professional",
+    name: "Professional",
+    price: 199,
+    priceId: process.env.STRIPE_PROFESSIONAL_PRICE_ID || "",
+    trialDays: 14,
+  },
+]
+
+export type Plan = (typeof plans)[number]
+
+export const auth = betterAuth({
+  secret: AUTH_SECRET, // Use the constant instead of function call
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: {
+      user: schema.users,
+      session: schema.sessions,
+      account: schema.accounts,
+      verification: schema.verificationTokens,
+    },
+  }),
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirectURI: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/google`,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
+  plugins: [
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: plans,
+        getCheckoutSessionParams: async ({ user, plan }) => {
+          const checkoutSession: {
+            params: {
+              subscription_data?: {
+                trial_period_days: number
+              }
+            }
+          } = {
+            params: {},
+          }
+
+          // @ts-ignore - trialAllowed may not be on user type yet
+          if (user.trialAllowed) {
+            checkoutSession.params.subscription_data = {
+              trial_period_days: (plan as Plan).trialDays,
+            }
+          }
+
+          return checkoutSession
+        },
+        onSubscriptionComplete: async ({ event }) => {
+          const eventDataObject = event.data.object as Stripe.Checkout.Session
+          // Handle subscription completion
+          console.log("[v0] Subscription completed for user:", eventDataObject.metadata?.userId)
+        },
+      },
+    }),
+  ],
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 8,
+  },
+  trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"],
   session: {
+    expiresIn: 60 * 60 * 24 * 60, // 60 days
+    updateAge: 60 * 60 * 24 * 3, // 3 days
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // 5 minutes
     },
   },
-  trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL!],
 })
+
+export type Session = typeof auth.$Infer.Session.session
+export type User = typeof auth.$Infer.Session.user
+
+export async function getActiveSubscription() {
+  const nextHeaders = await headers()
+  const subscriptions = await auth.api.listActiveSubscriptions({
+    headers: nextHeaders,
+  })
+  return subscriptions.find((s) => s.status === "active")
+}
