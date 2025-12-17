@@ -9,17 +9,18 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="mb-4 flex items-center gap-2">
-              <Image 
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-instarank-MMiLE3J2Evezc3dt86To08AP2WaJ9g.png" 
-                alt="InstaRank" 
+              <Image
+                src="/images/logo-instarank.png"
+                alt="InstaRank"
                 width={32}
                 height={32}
-                className="h-8 w-8 rounded-lg" 
+                className="h-8 w-8 rounded-lg"
               />
               <span className="text-xl font-bold text-foreground">InstaRank</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              AI-powered Amazon optimization and marketing automation for sellers who want to scale.
+              AI-powered product optimization and marketing automation across Google, Amazon, Perplexity, and AI search
+              for sellers who want to scale.
             </p>
           </div>
 

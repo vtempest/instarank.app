@@ -1,5 +1,5 @@
-import { Search, Sparkles, FileText, Share2, BarChart, Brain } from 'lucide-react'
-import { BorderBeam } from '@/components/ui/border-beam'
+import { Search, Sparkles, FileText, Share2, BarChart, Brain } from "lucide-react"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 const features = [
   {
@@ -16,7 +16,8 @@ const features = [
   {
     icon: Sparkles,
     title: "Keyword Discovery Agent",
-    description: "Intelligent agent finds high-volume, low-competition keywords and optimizes backend search terms to maximize your visibility.",
+    description:
+      "Intelligent agent finds high-volume, low-competition keywords and optimizes backend search terms to maximize your visibility.",
     borderColor: "border-purple-500",
     bgColor: "bg-purple-500/10",
     iconColor: "text-purple-600",
@@ -26,7 +27,8 @@ const features = [
   {
     icon: FileText,
     title: "SEO Content Generator Agent",
-    description: "AI writing agent creates SEO-optimized titles, bullets, and A+ Content tailored for Amazon's A9 algorithm and conversions.",
+    description:
+      "AI writing agent creates SEO-optimized titles, bullets, and A+ Content tailored for Google, Amazon's A9, and AI search algorithms for maximum conversions.",
     borderColor: "border-green-500",
     bgColor: "bg-green-500/10",
     iconColor: "text-green-600",
@@ -36,7 +38,8 @@ const features = [
   {
     icon: Share2,
     title: "Social Media Automation Agent",
-    description: "Smart scheduling agent manages posts across Facebook, Instagram, TikTok, and LinkedIn with AI-generated captions and hashtags.",
+    description:
+      "Smart scheduling agent manages posts across Facebook, Instagram, TikTok, and LinkedIn with AI-generated captions and hashtags.",
     borderColor: "border-orange-500",
     bgColor: "bg-orange-500/10",
     iconColor: "text-orange-600",
@@ -46,7 +49,8 @@ const features = [
   {
     icon: BarChart,
     title: "Content Marketing Agent",
-    description: "Blog writing agent auto-generates SEO blog posts, product comparisons, and buying guides with WordPress integration included.",
+    description:
+      "Blog writing agent auto-generates SEO blog posts, product comparisons, and buying guides with WordPress integration included.",
     borderColor: "border-pink-500",
     bgColor: "bg-pink-500/10",
     iconColor: "text-pink-600",
@@ -56,7 +60,8 @@ const features = [
   {
     icon: Brain,
     title: "Analytics Intelligence Agent",
-    description: "AI analytics agent tracks performance metrics, identifies trends, and provides actionable insights to boost your Amazon sales.",
+    description:
+      "AI analytics agent tracks performance metrics across Google, Amazon, and AI search platforms, identifies trends, and provides actionable insights to boost your sales.",
     borderColor: "border-cyan-500",
     bgColor: "bg-cyan-500/10",
     iconColor: "text-cyan-600",
@@ -74,7 +79,8 @@ export function FeaturesSection() {
             Specialized AI Agents for Every Task
           </h2>
           <p className="text-pretty text-lg text-muted-foreground">
-            Each AI agent is purpose-built to automate specific aspects of your Amazon business, working together to maximize your success.
+            Each AI agent is purpose-built to automate specific aspects of your e-commerce business across multiple
+            platforms, working together to maximize your success.
           </p>
         </div>
 
@@ -95,7 +101,9 @@ export function FeaturesSection() {
                   colorFrom={feature.beamFrom}
                   colorTo={feature.beamTo}
                 />
-                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${feature.bgColor} transition-transform group-hover:scale-110`}>
+                <div
+                  className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${feature.bgColor} transition-transform group-hover:scale-110`}
+                >
                   <Icon className={`h-6 w-6 ${feature.iconColor}`} />
                 </div>
                 <h3 className="mb-2 text-xl font-semibold text-foreground">{feature.title}</h3>

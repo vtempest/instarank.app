@@ -61,14 +61,13 @@ export const authConfig: NextAuthConfig = {
 }
 
 export const { handlers, auth, signIn, signOut } = betterAuth({
-  database: {
-    provider: "postgres",
-    url: process.env.DATABASE_URL!,
-  },
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.NEXT_PUBLIC_APP_URL!,
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/google`,
     },
   },
   session: {

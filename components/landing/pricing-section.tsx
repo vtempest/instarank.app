@@ -8,7 +8,7 @@ const plans = [
     price: 49,
     description: "Perfect for new sellers testing the waters",
     features: [
-      "1 Amazon store",
+      "1 store",
       "25 products",
       "10 competitors tracked",
       "500 keywords/month",
@@ -25,7 +25,7 @@ const plans = [
     price: 149,
     description: "Most popular for growing sellers",
     features: [
-      "3 Amazon stores",
+      "3 stores",
       "100 products",
       "50 competitors tracked",
       "2,000 keywords/month",
@@ -43,7 +43,7 @@ const plans = [
     price: 399,
     description: "For established brands and agencies",
     features: [
-      "10 Amazon stores",
+      "10 stores",
       "500 products",
       "Unlimited competitors",
       "Unlimited keywords",

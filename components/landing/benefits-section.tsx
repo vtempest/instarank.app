@@ -22,8 +22,8 @@ const benefits = [
   {
     icon: BarChart3,
     stat: "1.9M",
-    label: "Active Amazon Sellers",
-    description: "Join thousands of sellers optimizing their Amazon business",
+    label: "Active E-commerce Sellers",
+    description: "Join thousands of sellers optimizing across Google, Amazon, and AI search",
   },
 ]
 
@@ -33,10 +33,11 @@ export function BenefitsSection() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center mb-12">
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Built for Amazon Sellers Who Want to Scale
+            Built for E-commerce Sellers Who Want to Scale
           </h2>
           <p className="text-pretty text-lg text-muted-foreground">
-            Stop juggling multiple tools. Get everything you need to optimize, market, and grow your Amazon business.
+            Stop juggling multiple tools. Get everything you need to optimize, market, and grow your business across
+            Google Shopping, Amazon, Perplexity, and AI-powered search.
           </p>
         </div>
 
