@@ -18,7 +18,7 @@
     "@auth/core": "latest",
     "@auth/drizzle-adapter": "latest",
     "@aws-sdk/client-rds-data": "latest",
-    "@better-auth/core": "latest",
+    "@better-auth/core": "1.4.7",
     "@better-auth/stripe": "1.4.7",
     "@cloudflare/workers-types": "latest",
     "@edge-runtime/vm": "latest",

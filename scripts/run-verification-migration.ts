@@ -3,7 +3,7 @@ import { readFileSync } from "fs"
 import { join } from "path"
 
 async function runVerificationMigration() {
-  const databaseUrl = process.env.NEON_NEON_DATABASE_URL || process.env.DATABASE_URL
+  const databaseUrl = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL
 
   if (!databaseUrl) {
     throw new Error(
@@ -22,7 +22,15 @@ async function runVerificationMigration() {
       "utf-8",
     )
 
-    await sql(migrationSQL)
+    // Split by semicolon to handle multiple statements
+    const statements = migrationSQL
+      .split(";")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+
+    for (const statement of statements) {
+      await sql.query(statement)
+    }
 
     console.log("✅ Verification table migration completed successfully!")
     console.log("   - Created verification table with all required fields (id, identifier, value, expires_at)")
